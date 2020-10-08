@@ -1,17 +1,16 @@
 package com.ocp.basejava.storage;
 
-import com.ocp.basejava.exception.StorageException;
-import com.ocp.basejava.model.Resume;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.File;
 
 public class ObjectStreamStorage extends AbstractFileStorage {
     public ObjectStreamStorage(@NotNull File directory) {
-        super(directory);
+        super(directory, new ObjectStreamSerialization() {
+        });
     }
 
-    @Override
+   /* @Override
     protected void doWrite(Resume resume, OutputStream os) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(resume);
@@ -25,5 +24,5 @@ public class ObjectStreamStorage extends AbstractFileStorage {
         } catch (ClassNotFoundException e) {
             throw new StorageException("Error read resume",null,e);
         }
-    }
+    }*/
 }

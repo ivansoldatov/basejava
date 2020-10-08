@@ -8,12 +8,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
 
     private File directory;
     private ResumeSerialization serialization;
 
-    public AbstractFileStorage(@NotNull File directory, @NotNull ResumeSerialization rs) {
+    public FileStorage(@NotNull File directory, @NotNull ResumeSerialization rs) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -23,8 +23,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
         this.serialization = rs;
     }
-//    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
-//    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     protected File getSearchKey(String uuid) {

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class ObjectStreamStorage extends AbstractFileStorage {
+public class ObjectStreamStorage extends FileStorage {
     public ObjectStreamStorage(@NotNull File directory) {
         super(directory, new ObjectStreamSerialization() {
         });

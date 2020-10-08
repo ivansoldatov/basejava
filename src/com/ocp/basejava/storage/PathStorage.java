@@ -13,22 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
     private ResumeSerialization serialization;
 
-    public AbstractPathStorage(@NotNull String dir, @NotNull ResumeSerialization rs) {
+    public PathStorage(@NotNull String dir, @NotNull ResumeSerialization rs) {
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
         this.directory = directory;
-        this.serialization=rs;
+        this.serialization = rs;
     }
-
-//    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
-//    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     protected Path getSearchKey(String uuid) {

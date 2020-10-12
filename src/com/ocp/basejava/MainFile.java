@@ -5,16 +5,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MainFile {
-    private static void getNameFiles(File directory) {
+    private static void getNameFiles(File directory, String ofset) {
         if (directory.isDirectory()) {
             File[] files = directory.listFiles();
             if (files != null) {
                 for (File f : files) {
                     if (f.isFile()) {
-                        System.out.println("File: " + f.getName());
+                        System.out.println(ofset + "File: " + f.getName());
                     } else {
-                        System.out.println("Directory: " + f.getName());
-                        getNameFiles(f);
+                        System.out.println(ofset + "Dir: " + f.getName());
+                        getNameFiles(f, ofset + "-");
                     }
                 }
             }
@@ -25,7 +25,7 @@ public class MainFile {
     public static void main(String[] args) {
         String myProjectDir = ".\\src\\com\\ocp\\basejava";
         File directory = new File(myProjectDir);
-        getNameFiles(directory);
+        getNameFiles(directory, "|");
         System.out.println("-------------------------");
         String filePath = ".\\.gitignore";
         File file = new File(filePath);

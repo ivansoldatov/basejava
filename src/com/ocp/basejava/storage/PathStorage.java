@@ -5,12 +5,10 @@ import com.ocp.basejava.model.Resume;
 import com.ocp.basejava.strategy.ResumeSerialization;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
-import java.nio.file.DirectoryStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,23 +70,18 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<Resume> list = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
-            for (Path entry : stream) {
-                list.add(doGet(entry));
-            }
+        try (Stream<Path> sf = Files.list(directory)) {
+            return sf.map(this::doGet).collect(Collectors.toList());
         } catch (IOException e) {
             throw new StorageException("Directory read error", directory.toString(), e);
         }
-        return list;
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (
-                IOException e) {
+        try (Stream<Path> sf = Files.list(directory)) {
+            sf.forEach(this::doDelete);
+        } catch (IOException e) {
             throw new StorageException("Resume delete error ", null);
         }
     }

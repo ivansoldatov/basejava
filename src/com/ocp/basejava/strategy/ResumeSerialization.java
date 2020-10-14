@@ -1,4 +1,4 @@
-package com.ocp.basejava.strategies;
+package com.ocp.basejava.strategy;
 
 import com.ocp.basejava.model.Resume;
 

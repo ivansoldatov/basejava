@@ -1,8 +1,7 @@
-package com.ocp.basejava.strategies;
+package com.ocp.basejava.strategy;
 
 import com.ocp.basejava.exception.StorageException;
 import com.ocp.basejava.model.Resume;
-import com.ocp.basejava.strategies.ResumeSerialization;
 
 import java.io.*;
 

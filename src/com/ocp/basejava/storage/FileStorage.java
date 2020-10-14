@@ -2,10 +2,12 @@ package com.ocp.basejava.storage;
 
 import com.ocp.basejava.exception.StorageException;
 import com.ocp.basejava.model.Resume;
+import com.ocp.basejava.strategy.ResumeSerialization;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileStorage extends AbstractStorage<File> {
@@ -71,37 +73,33 @@ public class FileStorage extends AbstractStorage<File> {
         }
     }
 
-    @Override
-    protected List<Resume> doCopyAll() {
+    private File[] getFiles() {
         File[] listFiles = directory.listFiles();
         if (listFiles == null) {
             throw new StorageException("Directory read error", null);
         } else {
-            List<Resume> listResume = new ArrayList<>();
-            for (File f : listFiles) {
-                listResume.add(doGet(f));
-            }
-            return listResume;
+            return listFiles;
         }
+    }
+
+    @Override
+    protected List<Resume> doCopyAll() {
+        List<Resume> listResume = new ArrayList<>();
+        for (File f : getFiles()) {
+            listResume.add(doGet(f));
+        }
+        return listResume;
     }
 
     @Override
     public void clear() {
-        File[] listFiles = directory.listFiles();
-        if (listFiles != null) {
-            for (File f : listFiles) {
-                doDelete(f);
-            }
+        for (File f : getFiles()) {
+            doDelete(f);
         }
     }
-
     @Override
     public int size() {
-        String[] listFiles = directory.list();
-        if (listFiles == null) {
-            throw new StorageException("Directory read error", null);
-        } else {
-            return listFiles.length;
-        }
+        return getFiles().length;
     }
 }
+

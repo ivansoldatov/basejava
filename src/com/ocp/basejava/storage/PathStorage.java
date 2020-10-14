@@ -2,6 +2,7 @@ package com.ocp.basejava.storage;
 
 import com.ocp.basejava.exception.StorageException;
 import com.ocp.basejava.model.Resume;
+import com.ocp.basejava.strategy.ResumeSerialization;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;

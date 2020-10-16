@@ -2,7 +2,7 @@ package com.ocp.basejava.storage;
 
 import com.ocp.basejava.exception.StorageException;
 import com.ocp.basejava.model.Resume;
-import com.ocp.basejava.strategy.ResumeSerialization;
+import com.ocp.basejava.storage.serializer.StreamSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -16,14 +16,14 @@ import java.util.stream.Stream;
 public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
-    private ResumeSerialization serialization;
+    private StreamSerializer streamSerializer;
 
-    public PathStorage(@NotNull String dir, @NotNull ResumeSerialization rs) {
+    public PathStorage(@NotNull String dir, @NotNull StreamSerializer rs) {
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
-        this.serialization = rs;
+        this.streamSerializer = rs;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Path path, Resume resume) {
         try {
-            serialization.doWrite(resume, Files.newOutputStream(path));
+            streamSerializer.doWrite(resume, Files.newOutputStream(path));
         } catch (IOException e) {
             throw new StorageException("Path write error", path.toString(), e);
         }
@@ -62,7 +62,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return serialization.doRead(Files.newInputStream(path));
+            return streamSerializer.doRead(Files.newInputStream(path));
         } catch (IOException e) {
             throw new StorageException("Path read error", path.toString(), e);
         }

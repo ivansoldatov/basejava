@@ -1,11 +1,11 @@
-package com.ocp.basejava.strategy;
+package com.ocp.basejava.storage.serializer;
 
 import com.ocp.basejava.exception.StorageException;
 import com.ocp.basejava.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamSerialization implements ResumeSerialization {
+public class ObjectStreamSerializer implements StreamSerializer {
     @Override
     public void doWrite(Resume resume, OutputStream os) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {

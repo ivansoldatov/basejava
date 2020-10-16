@@ -2,36 +2,33 @@ package com.ocp.basejava.storage;
 
 import com.ocp.basejava.exception.StorageException;
 import com.ocp.basejava.model.Resume;
+import com.ocp.basejava.storage.serializer.StreamSerializer;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
-import java.nio.file.DirectoryStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
+    private StreamSerializer streamSerializer;
 
-    public AbstractPathStorage(@NotNull String dir) {
+    public PathStorage(@NotNull String dir, @NotNull StreamSerializer rs) {
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
-        this.directory = directory;
+        this.streamSerializer = rs;
     }
-
-    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
-
-    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     protected Path getSearchKey(String uuid) {
-        return Paths.get(directory.toString(), uuid);
+        return directory.resolve(uuid);
     }
 
     @Override
@@ -47,7 +44,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Path path, Resume resume) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toString())));
+            streamSerializer.doWrite(resume, Files.newOutputStream(path));
         } catch (IOException e) {
             throw new StorageException("Path write error", path.toString(), e);
         }
@@ -65,7 +62,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(path.toString())));
+            return streamSerializer.doRead(Files.newInputStream(path));
         } catch (IOException e) {
             throw new StorageException("Path read error", path.toString(), e);
         }
@@ -73,21 +70,17 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<Resume> list = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
-            for (Path entry : stream) {
-                list.add(doGet(entry));
-            }
+        try (Stream<Path> sf = Files.list(directory)) {
+            return sf.map(this::doGet).collect(Collectors.toList());
         } catch (IOException e) {
             throw new StorageException("Directory read error", directory.toString(), e);
         }
-        return list;
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
+        try (Stream<Path> sf = Files.list(directory)) {
+            sf.forEach(this::doDelete);
         } catch (IOException e) {
             throw new StorageException("Resume delete error ", null);
         }

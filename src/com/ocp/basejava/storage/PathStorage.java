@@ -70,26 +70,22 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        try (Stream<Path> sf = Files.list(directory)) {
-            return sf.map(this::doGet).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new StorageException("Directory read error", directory.toString(), e);
-        }
+            return getFiles().map(this::doGet).collect(Collectors.toList());
     }
 
     @Override
     public void clear() {
-        try (Stream<Path> sf = Files.list(directory)) {
-            sf.forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Resume delete error ", null);
-        }
+            getFiles().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
-        try (Stream<Path> files = Files.list(directory)) {
-            return (int) files.count();
+        return (int) getFiles().count();
+    }
+
+    private Stream<Path> getFiles() {
+        try {
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Directory read error", directory.toString(), e);
         }

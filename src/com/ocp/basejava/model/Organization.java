@@ -2,6 +2,8 @@ package com.ocp.basejava.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -11,11 +13,15 @@ import static java.util.Arrays.asList;
 import static com.ocp.basejava.util.DateUtil.of;
 import static com.ocp.basejava.util.DateUtil.NOW;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Link homePage;
     private List<Experience> experiences;
+
+    public Organization() {
+    }
 
     public Organization(@NotNull String name, @NotNull String url, @NotNull List<Experience> experiences) {
         this.homePage = new Link(name, url);

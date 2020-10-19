@@ -2,14 +2,20 @@ package com.ocp.basejava.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Link implements Serializable {
     public static final long serialVersionUID = 1L;
 
-    private final String name;
-    private final String url;
+    private String name;
+    private String url;
+
+    public Link() {
+    }
 
     public Link(@NotNull String name, @NotNull String url) {
         this.name = name;

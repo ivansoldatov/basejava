@@ -4,7 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class TextSection extends AbstractSection {
     public static final long serialVersionUID = 1L;
-    private final String content;
+    private String content;
+
+    public TextSection() {
+    }
 
     public TextSection(@NotNull String content) {
         this.content = content;
@@ -23,9 +26,7 @@ public class TextSection extends AbstractSection {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TextSection)) return false;
-
         TextSection that = (TextSection) o;
-
         return content.equals(that.content);
     }
 

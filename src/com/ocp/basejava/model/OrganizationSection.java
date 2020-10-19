@@ -10,6 +10,9 @@ public class OrganizationSection extends AbstractSection {
 
     private List<Organization> organizations;
 
+    public OrganizationSection() {
+    }
+
     public OrganizationSection(@NotNull List<Organization> organizations) {
         this.organizations = organizations;
     }

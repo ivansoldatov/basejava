@@ -9,6 +9,9 @@ public class ListSection extends AbstractSection {
     public static final long serialVersionUID = 1L;
     private List<String> items;
 
+    public ListSection() {
+    }
+
     public ListSection(@NotNull List<String> items) {
         this.items = items;
     }

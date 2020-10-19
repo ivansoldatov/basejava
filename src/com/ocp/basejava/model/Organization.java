@@ -78,6 +78,7 @@ public class Organization implements Serializable {
     //nested class
     //--------------------------------------------------
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Experience implements Serializable {
         public static final long serialVersionUID = 1L;
 
@@ -85,6 +86,9 @@ public class Organization implements Serializable {
         private LocalDate endDate;
         private String tittle;
         private String description;
+
+        public Experience() {
+        }
 
         public Experience(int startYear, Month startMonth, String tittle, String description) {
             this(of(startYear, startMonth), NOW, tittle, description);

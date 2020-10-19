@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 public class XmlStreamSerializer implements StreamSerializer {
     private XmlParser xmlParser;
 
-    public XmlStreamSerializer(XmlParser xmlParser) {
+    public XmlStreamSerializer() {
         this.xmlParser = new XmlParser(Resume.class, Organization.class, Link.class,
                 OrganizationSection.class, TextSection.class, ListSection.class, Organization.Experience.class);
     }

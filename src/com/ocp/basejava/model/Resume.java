@@ -2,9 +2,14 @@ package com.ocp.basejava.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.*;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
     public static final long serialVersionUID = 1L;
 

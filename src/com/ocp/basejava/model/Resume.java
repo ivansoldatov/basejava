@@ -13,10 +13,13 @@ import java.util.*;
 public class Resume implements Comparable<Resume>, Serializable {
     public static final long serialVersionUID = 1L;
 
-    private final String uuid;
-    private final String fullName;
+    private String uuid;
+    private String fullName;
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+
+    public Resume() {
+    }
 
     public Resume(@NotNull String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -55,6 +58,7 @@ public class Resume implements Comparable<Resume>, Serializable {
                 contacts.equals(resume.contacts) &&
                 sections.equals(resume.sections);
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(uuid, fullName, contacts, sections);

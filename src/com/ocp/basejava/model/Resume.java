@@ -50,7 +50,6 @@ public class Resume implements Comparable<Resume>, Serializable {
                 contacts.equals(resume.contacts) &&
                 sections.equals(resume.sections);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(uuid, fullName, contacts, sections);

@@ -11,6 +11,10 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 
 public class ResumeTestData {
+    static {
+
+
+    }
 
     //  TextSections
     public static final String objective = "Ведущий стажировок и корпоративного обучения по " +

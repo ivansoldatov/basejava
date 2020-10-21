@@ -14,6 +14,7 @@ public class OrganizationSection extends AbstractSection {
     }
 
     public OrganizationSection(@NotNull List<Organization> organizations) {
+
         this.organizations = organizations;
     }
 

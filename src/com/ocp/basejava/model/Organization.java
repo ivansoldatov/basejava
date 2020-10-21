@@ -25,10 +25,10 @@ public class Organization implements Serializable {
     public Organization() {
     }
 
-    public Organization(@NotNull String name, @NotNull String url, @NotNull List<Experience> experiences) {
+  /*  public Organization(@NotNull String name, @NotNull String url, @NotNull List<Experience> experiences) {
         this.homePage = new Link(name, url);
         this.experiences = experiences;
-    }
+    }*/
 
     public Organization(@NotNull String name, @NotNull String url, Experience... experiences) {
         this.homePage = new Link(name, url);

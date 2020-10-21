@@ -5,11 +5,6 @@ import com.ocp.basejava.util.DateUtil;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
 
 public class ResumeTestData {
 
@@ -43,22 +38,5 @@ public class ResumeTestData {
                 new Organization.Experience(DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "------", "Аспирантура"),
                 new Organization.Experience(DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "------", "Инженер"))));
         return resume;
-    }
-
-    public static void main(String[] args) {
-//        Resume myResume = fillResume("001", "Григорий Кислин");
-        System.out.println("myResume:");
-        System.out.println("UUID: " + myResume.getUuid());
-        System.out.println("fullName: " + myResume.getFullName());
-        for (Map.Entry<ContactType, String> entryContact : myResume.getContacts().entrySet()) {
-            System.out.printf("%s: %s \n", entryContact.getKey(), entryContact.getValue());
-        }
-        System.out.println();
-        for (Map.Entry<SectionType, AbstractSection> entry : myResume.getSections().entrySet()) {
-            SectionType sectionType = entry.getKey();
-            System.out.println(sectionType.getTitle() + ":");
-            AbstractSection section = entry.getValue();
-            System.out.println(section.toString());
-        }
     }
 }

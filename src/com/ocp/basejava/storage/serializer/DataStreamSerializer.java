@@ -1,8 +1,12 @@
 package com.ocp.basejava.storage.serializer;
 
 import com.ocp.basejava.model.*;
+import com.ocp.basejava.util.DateUtil;
 
 import java.io.*;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DataStreamSerializer implements StreamSerializer {
@@ -16,6 +20,7 @@ public class DataStreamSerializer implements StreamSerializer {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
+            dos.writeInt(resume.getSection().size());
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSection().entrySet()) {
                 SectionType st = entry.getKey();
                 dos.writeUTF(st.toString());
@@ -28,6 +33,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection ls = (ListSection) entry.getValue();
+                        dos.writeInt(ls.getItems().size());
                         for (String s : ls.getItems()) {
                             dos.writeUTF(s);
                         }
@@ -35,15 +41,17 @@ public class DataStreamSerializer implements StreamSerializer {
                     case EXPERIENCE:
                     case EDUCATION:
                         OrganizationSection orgSec = (OrganizationSection) entry.getValue();
+                        dos.writeInt(orgSec.getOrganizations().size());
                         for (Organization org : orgSec.getOrganizations()) {
-                            dos.writeUTF(org.getHomePage().getName());
-                            dos.writeUTF(org.getHomePage().getUrl());
+                            dos.writeInt(org.getExperiences().size());
                             for (Organization.Experience exp : org.getExperiences()) {
                                 dos.writeUTF(exp.getStartDate().toString());
                                 dos.writeUTF(exp.getEndDate().toString());
                                 dos.writeUTF(exp.getTittle());
                                 dos.writeUTF(exp.getDescription());
                             }
+                            dos.writeUTF(org.getHomePage().getName());
+                            dos.writeUTF(org.getHomePage().getUrl());
                         }
                         break;
                 }
@@ -60,6 +68,39 @@ public class DataStreamSerializer implements StreamSerializer {
             int sizeContacts = dis.readInt();
             for (int i = 0; i < sizeContacts; i++) {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
+            }
+            int sizeSections = dis.readInt();
+            for (int i = 0; i < sizeSections; i++) {
+                String ts = dis.readUTF();
+                switch (ts) {
+                    case ("OBJECTIVE"):
+                    case ("PERSONAL"):
+                        resume.addSection(SectionType.valueOf(ts), new TextSection(dis.readUTF()));
+                        break;
+                    case ("ACHIEVEMENT"):
+                    case ("QUALIFICATIONS"):
+                        int sizeList = dis.readInt();
+                        List<String> list = new ArrayList<>(sizeList);
+                        for (int j = 0; j < sizeList; j++) {
+                            list.add(dis.readUTF());
+                        }
+                        resume.addSection(SectionType.valueOf(ts), new ListSection(list));
+                        break;
+                    case ("EXPERIENCE"):
+                    case ("EDUCATION"):
+                        int numOrg = dis.readInt();
+                        List<Organization> listOrg = new ArrayList<>(numOrg);
+                        for (int k = 0; k < numOrg; k++) {
+                            int numExp = dis.readInt();
+                            List<Organization.Experience> listExp = new ArrayList<>(numExp);
+                            for (int m = 0; m < numExp; m++) {
+                                listExp.add(new Organization.Experience(DateUtil.of(Integer.parseInt(dis.readUTF()), Month.valueOf(dis.readUTF())),
+                                        DateUtil.of(Integer.parseInt(dis.readUTF()), Month.valueOf(dis.readUTF())), dis.readUTF(), dis.readUTF()));
+                            }
+                            listOrg.add(new Organization(dis.readUTF(), dis.readUTF(), listExp));
+                        }
+                        resume.addSection(SectionType.valueOf(ts), new OrganizationSection(listOrg));
+                }
             }
             return resume;
         }

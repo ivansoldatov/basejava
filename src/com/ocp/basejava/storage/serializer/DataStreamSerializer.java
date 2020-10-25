@@ -17,23 +17,23 @@ public class DataStreamSerializer implements StreamSerializer {
                 dos.writeUTF(entry.getValue());
             }
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSection().entrySet()) {
-                String nameSection = entry.getKey().name();
-                dos.writeUTF(nameSection);
-                switch (nameSection) {
-                    case ("OBJECTIVE"):
-                    case ("PERSONAL"):
+                SectionType st = entry.getKey();
+                dos.writeUTF(st.toString());
+                switch (st) {
+                    case OBJECTIVE:
+                    case PERSONAL:
                         TextSection ts = (TextSection) entry.getValue();
                         dos.writeUTF(ts.getContent());
                         break;
-                    case ("ACHIEVEMENT"):
-                    case ("QUALIFICATIONS"):
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
                         ListSection ls = (ListSection) entry.getValue();
                         for (String s : ls.getItems()) {
                             dos.writeUTF(s);
                         }
                         break;
-                    case ("EXPERIENCE"):
-                    case ("EDUCATION"):
+                    case EXPERIENCE:
+                    case EDUCATION:
                         OrganizationSection orgSec = (OrganizationSection) entry.getValue();
                         for (Organization org : orgSec.getOrganizations()) {
                             dos.writeUTF(org.getHomePage().getName());

@@ -25,6 +25,22 @@ public class Organization implements Serializable {
     public Organization() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        if (!homePage.equals(that.homePage)) return false;
+        return experiences.equals(that.experiences);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = homePage.hashCode();
+        result = 31 * result + experiences.hashCode();
+        return result;
+    }
+
     public Organization(@NotNull String name, @NotNull String url, @NotNull List<Experience> experiences) {
         this.homePage = new Link(name, url);
         this.experiences = experiences;
@@ -59,22 +75,6 @@ public class Organization implements Serializable {
             sb.append(e).append('\n');
         }
         return sb.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Organization that = (Organization) o;
-        if (!homePage.equals(that.homePage)) return false;
-        return experiences.equals(that.experiences);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = homePage.hashCode();
-        result = 31 * result + experiences.hashCode();
-        return result;
     }
     //--------------------------------------------------
     //nested class

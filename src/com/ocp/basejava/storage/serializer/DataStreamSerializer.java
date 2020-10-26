@@ -4,7 +4,6 @@ import com.ocp.basejava.model.*;
 import com.ocp.basejava.util.DateUtil;
 
 import java.io.*;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -94,8 +93,9 @@ public class DataStreamSerializer implements StreamSerializer {
                             int numExp = dis.readInt();
                             List<Organization.Experience> listExp = new ArrayList<>(numExp);
                             for (int m = 0; m < numExp; m++) {
-                                listExp.add(new Organization.Experience(DateUtil.of(Integer.parseInt(dis.readUTF()), Month.valueOf(dis.readUTF())),
-                                        DateUtil.of(Integer.parseInt(dis.readUTF()), Month.valueOf(dis.readUTF())), dis.readUTF(), dis.readUTF()));
+                                String sd=dis.readUTF();
+                                String ed=dis.readUTF();
+                                listExp.add(new Organization.Experience(DateUtil.ofStr(sd),DateUtil.ofStr(ed), dis.readUTF(), dis.readUTF()));
                             }
                             listOrg.add(new Organization(dis.readUTF(), dis.readUTF(), listExp));
                         }

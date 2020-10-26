@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
+import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Link implements Serializable {
@@ -38,14 +39,12 @@ public class Link implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Link link = (Link) o;
-        if (!name.equals(link.name)) return false;
-        return url.equals(link.url);
+        return name.equals(link.name) &&
+                url.equals(link.url);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + url.hashCode();
-        return result;
+        return Objects.hash(name, url);
     }
 }

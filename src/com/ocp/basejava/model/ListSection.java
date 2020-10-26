@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ListSection extends AbstractSection {
     public static final long serialVersionUID = 1L;
@@ -34,7 +35,7 @@ public class ListSection extends AbstractSection {
 
     @Override
     public int hashCode() {
-        return items.hashCode();
+        return Objects.hash(items);
     }
 
     @Override

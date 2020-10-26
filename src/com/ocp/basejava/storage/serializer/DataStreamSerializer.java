@@ -93,9 +93,9 @@ public class DataStreamSerializer implements StreamSerializer {
                             int numExp = dis.readInt();
                             List<Organization.Experience> listExp = new ArrayList<>(numExp);
                             for (int m = 0; m < numExp; m++) {
-                                String sd=dis.readUTF();
-                                String ed=dis.readUTF();
-                                listExp.add(new Organization.Experience(DateUtil.ofStr(sd),DateUtil.ofStr(ed), dis.readUTF(), dis.readUTF()));
+                                String sd = dis.readUTF();
+                                String ed = dis.readUTF();
+                                listExp.add(new Organization.Experience(DateUtil.ofStr(sd), DateUtil.ofStr(ed), dis.readUTF(), dis.readUTF()));
                             }
                             listOrg.add(new Organization(dis.readUTF(), dis.readUTF(), listExp));
                         }

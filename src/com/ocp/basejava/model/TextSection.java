@@ -2,6 +2,8 @@ package com.ocp.basejava.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class TextSection extends AbstractSection {
     public static final long serialVersionUID = 1L;
     private String content;
@@ -32,6 +34,6 @@ public class TextSection extends AbstractSection {
 
     @Override
     public int hashCode() {
-        return content.hashCode();
+        return Objects.hash(content);
     }
 }

@@ -26,8 +26,6 @@ abstract class AbstractStorageTest {
     static final Resume RESUME_2 = ResumeTestData.fillResumeContacts(UUID_2, "Name2");
     static final Resume RESUME_3 = ResumeTestData.fillResumeFull(UUID_3, "Name3");
     static final Resume RESUME_4 = ResumeTestData.fillResumeFull(UUID_4, "Name4");
-//    static final Resume RESUME_3 = ResumeTestData.fillResumeContacts(UUID_3, "Name3");
-//    static final Resume RESUME_4 = ResumeTestData.fillResumeContacts(UUID_4, "Name4");
 
     AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -90,8 +88,8 @@ abstract class AbstractStorageTest {
 
     @Test
     void get() {
-//        assertGet(RESUME_1);
-//        assertGet(RESUME_2);
+        assertGet(RESUME_1);
+        assertGet(RESUME_2);
         assertGet(RESUME_3);
     }
 

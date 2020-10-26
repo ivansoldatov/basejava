@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Arrays.asList;
 import static com.ocp.basejava.util.DateUtil.of;
@@ -30,15 +31,13 @@ public class Organization implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        if (!homePage.equals(that.homePage)) return false;
-        return experiences.equals(that.experiences);
+        return homePage.equals(that.homePage) &&
+                experiences.equals(that.experiences);
     }
 
     @Override
     public int hashCode() {
-        int result = homePage.hashCode();
-        result = 31 * result + experiences.hashCode();
-        return result;
+        return Objects.hash(homePage, experiences);
     }
 
     public Organization(@NotNull String name, @NotNull String url, @NotNull List<Experience> experiences) {
@@ -153,19 +152,15 @@ public class Organization implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Experience that = (Experience) o;
-            if (!startDate.equals(that.startDate)) return false;
-            if (!endDate.equals(that.endDate)) return false;
-            if (!tittle.equals(that.tittle)) return false;
-            return description.equals(that.description);
+            return startDate.equals(that.startDate) &&
+                    endDate.equals(that.endDate) &&
+                    tittle.equals(that.tittle) &&
+                    description.equals(that.description);
         }
 
         @Override
         public int hashCode() {
-            int result = startDate.hashCode();
-            result = 31 * result + endDate.hashCode();
-            result = 31 * result + tittle.hashCode();
-            result = 31 * result + description.hashCode();
-            return result;
+            return Objects.hash(startDate, endDate, tittle, description);
         }
     }
 }

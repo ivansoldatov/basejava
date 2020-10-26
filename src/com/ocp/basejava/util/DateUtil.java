@@ -10,9 +10,8 @@ public class DateUtil {
         return LocalDate.of(year, month, 1);
     }
 
-    public static LocalDate ofStr (String s) {
-        String[] str = s.split("-",3);
-        return of(Integer.parseInt(str[0]),Month.of(Integer.parseInt(str[1])));
+    public static LocalDate ofStr(String s) {
+        String[] str = s.split("-", 3);
+        return of(Integer.parseInt(str[0]), Month.of(Integer.parseInt(str[1])));
     }
-
 }

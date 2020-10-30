@@ -17,16 +17,20 @@ public class MainCollections {
     private static final String UUID_4 = "uuid4";
     private static final Resume RESUME_4 = new Resume(UUID_4);
 
+
+
+
     public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+       list.forEach(System.out::println);
+
         Collection<Resume> collection = new ArrayList<>();
         collection.add(RESUME_1);
         collection.add(RESUME_2);
         collection.add(RESUME_3);
-
         for (Resume r : collection) {
             System.out.println(r);
         }
-
         Iterator<Resume> iterator = collection.iterator();
         while (iterator.hasNext()) {
             Resume r = iterator.next();
@@ -36,12 +40,10 @@ public class MainCollections {
             }
         }
         System.out.println(collection.toString());
-
         Map<String, Resume> map = new HashMap<>();
         map.put(UUID_1, RESUME_1);
         map.put(UUID_2, RESUME_2);
         map.put(UUID_3, RESUME_3);
-
         //Bad!
         for (String uuid : map.keySet()) {
             System.out.println(map.get(uuid));
@@ -49,7 +51,6 @@ public class MainCollections {
         for (Map.Entry<String, Resume> entry : map.entrySet()) {
             System.out.println(entry.getValue());
         }
-
         List<Resume> resumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
         resumes.remove(1);
         System.out.println(resumes);

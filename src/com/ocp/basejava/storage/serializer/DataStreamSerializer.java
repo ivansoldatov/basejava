@@ -44,30 +44,26 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        ListSection ls = (ListSection) entry.getValue();
-                        wrCollection(dos, ls.getItems(), dos::writeUTF);
+                        wrCollection(dos, ((ListSection) section).getItems(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        OrganizationSection orgSec = (OrganizationSection) entry.getValue();
-                        wrCollection(dos, orgSec.getOrganizations(), item -> {
-                            for (Organization org : orgSec.getOrganizations()) {
-                                dos.writeInt(org.getExperiences().size());
-                                for (Organization.Experience exp : org.getExperiences()) {
-                                    dos.writeUTF(exp.getStartDate().toString());
-                                    dos.writeUTF(exp.getEndDate().toString());
-                                    dos.writeUTF(exp.getTittle());
-                                    dos.writeUTF(exp.getDescription());
-                                }
-                                dos.writeUTF(org.getHomePage().getName());
-                                dos.writeUTF(org.getHomePage().getUrl());
-                            }
+                        wrCollection(dos, ((OrganizationSection) section).getOrganizations(), org -> {
+                            wrCollection(dos, org.getExperiences(), item -> {
+                                dos.writeUTF(item.getStartDate().toString());
+                                dos.writeUTF(item.getEndDate().toString());
+                                dos.writeUTF(item.getTittle());
+                                dos.writeUTF(item.getDescription());
+                            });
+                            dos.writeUTF(org.getHomePage().getName());
+                            dos.writeUTF(org.getHomePage().getUrl());
                         });
                         break;
                 }
             });
         }
     }
+
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {

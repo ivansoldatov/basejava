@@ -27,50 +27,47 @@ public class DataStreamSerializer implements StreamSerializer {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            dos.writeInt(resume.getContact().size());
-            for (Map.Entry<ContactType, String> entry : resume.getContact().entrySet()) {
+            Map<ContactType, String> contacts = resume.getContacts();
+            wrCollection(dos, contacts.entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
-            dos.writeInt(resume.getSection().size());
-            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSection().entrySet()) {
-                SectionType st = entry.getKey();
-                dos.writeUTF(st.toString());
-                switch (st) {
+            });
+            Map<SectionType, AbstractSection> sections = resume.getSections();
+            wrCollection(dos, sections.entrySet(), entry -> {
+                SectionType sectionType = entry.getKey();
+                AbstractSection section = entry.getValue();
+                dos.writeUTF(sectionType.toString());
+                switch (sectionType) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        TextSection ts = (TextSection) entry.getValue();
-                        dos.writeUTF(ts.getContent());
+                        dos.writeUTF(((TextSection) section).getContent());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection ls = (ListSection) entry.getValue();
-                        dos.writeInt(ls.getItems().size());
-                        for (String s : ls.getItems()) {
-                            dos.writeUTF(s);
-                        }
+                        wrCollection(dos, ls.getItems(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         OrganizationSection orgSec = (OrganizationSection) entry.getValue();
-                        dos.writeInt(orgSec.getOrganizations().size());
-                        for (Organization org : orgSec.getOrganizations()) {
-                            dos.writeInt(org.getExperiences().size());
-                            for (Organization.Experience exp : org.getExperiences()) {
-                                dos.writeUTF(exp.getStartDate().toString());
-                                dos.writeUTF(exp.getEndDate().toString());
-                                dos.writeUTF(exp.getTittle());
-                                dos.writeUTF(exp.getDescription());
+                        wrCollection(dos, orgSec.getOrganizations(), item -> {
+                            for (Organization org : orgSec.getOrganizations()) {
+                                dos.writeInt(org.getExperiences().size());
+                                for (Organization.Experience exp : org.getExperiences()) {
+                                    dos.writeUTF(exp.getStartDate().toString());
+                                    dos.writeUTF(exp.getEndDate().toString());
+                                    dos.writeUTF(exp.getTittle());
+                                    dos.writeUTF(exp.getDescription());
+                                }
+                                dos.writeUTF(org.getHomePage().getName());
+                                dos.writeUTF(org.getHomePage().getUrl());
                             }
-                            dos.writeUTF(org.getHomePage().getName());
-                            dos.writeUTF(org.getHomePage().getUrl());
-                        }
+                        });
                         break;
                 }
-            }
+            });
         }
     }
-
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {

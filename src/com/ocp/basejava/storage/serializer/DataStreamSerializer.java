@@ -49,14 +49,14 @@ public class DataStreamSerializer implements StreamSerializer {
                     case EXPERIENCE:
                     case EDUCATION:
                         wrCollection(dos, ((OrganizationSection) section).getOrganizations(), org -> {
+                            dos.writeUTF(org.getHomePage().getName());
+                            dos.writeUTF(org.getHomePage().getUrl());
                             wrCollection(dos, org.getExperiences(), item -> {
                                 dos.writeUTF(item.getStartDate().toString());
                                 dos.writeUTF(item.getEndDate().toString());
                                 dos.writeUTF(item.getTittle());
                                 dos.writeUTF(item.getDescription());
                             });
-                            dos.writeUTF(org.getHomePage().getName());
-                            dos.writeUTF(org.getHomePage().getUrl());
                         });
                         break;
                 }
@@ -94,6 +94,8 @@ public class DataStreamSerializer implements StreamSerializer {
                     case ("EXPERIENCE"):
                     case ("EDUCATION"):
                         int numOrg = dis.readInt();
+                        String name = dis.readUTF();
+                        String url = dis.readUTF();
                         List<Organization> listOrg = new ArrayList<>(numOrg);
                         for (int k = 0; k < numOrg; k++) {
                             int numExp = dis.readInt();
@@ -101,7 +103,7 @@ public class DataStreamSerializer implements StreamSerializer {
                             for (int m = 0; m < numExp; m++) {
                                 listExp.add(new Organization.Experience(LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()), dis.readUTF(), dis.readUTF()));
                             }
-                            listOrg.add(new Organization(dis.readUTF(), dis.readUTF(), listExp));
+                            listOrg.add(new Organization(name, url, listExp));
                         }
                         resume.addSection(SectionType.valueOf(ts), new OrganizationSection(listOrg));
                 }

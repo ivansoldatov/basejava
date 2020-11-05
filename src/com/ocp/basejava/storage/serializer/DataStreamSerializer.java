@@ -1,3 +1,4 @@
+
 package com.ocp.basejava.storage.serializer;
 
 import com.ocp.basejava.model.*;
@@ -54,7 +55,7 @@ public class DataStreamSerializer implements StreamSerializer {
                             wrCollection(dos, org.getExperiences(), item -> {
                                 dos.writeUTF(item.getStartDate().toString());
                                 dos.writeUTF(item.getEndDate().toString());
-                                dos.writeUTF(item.getTittle());
+                                dos.writeUTF(item.getTitle());
                                 dos.writeUTF(item.getDescription());
                             });
                         });
@@ -65,6 +66,69 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     @Override
+    public Resume doRead(InputStream is) throws IOException {
+        try (DataInputStream dis = new DataInputStream(is)) {
+            String uuid = dis.readUTF();
+            String fullName = dis.readUTF();
+            Resume resume = new Resume(uuid, fullName);
+            readItems(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readItems(dis, () -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                resume.addSection(sectionType, readSection(dis, sectionType));
+            });
+            return resume;
+        }
+    }
+
+    private AbstractSection readSection(DataInputStream dis, SectionType sectionType) throws IOException {
+        switch (sectionType) {
+            case PERSONAL:
+            case OBJECTIVE:
+                return new TextSection(dis.readUTF());
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                return new ListSection(readList(dis, dis::readUTF));
+            case EXPERIENCE:
+            case EDUCATION:
+                return new OrganizationSection(
+                        readList(dis, () -> new Organization(
+                                new Link(dis.readUTF(), dis.readUTF()),
+                                readList(dis, () -> new Organization.Experience(
+                                        LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()), dis.readUTF(), dis.readUTF()
+                                ))
+                        )));
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+    private <T> List<T> readList(DataInputStream dis, ElementReader<T> reader) throws IOException {
+        int size = dis.readInt();
+        List<T> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list.add(reader.read());
+        }
+        return list;
+    }
+
+    private interface ElementProcessor {
+        void process() throws IOException;
+    }
+
+    private interface ElementReader<T> {
+        T read() throws IOException;
+    }
+
+    private void readItems(DataInputStream dis, ElementProcessor processor) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            processor.process();
+        }
+    }
+}
+
+
+   /* @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             String uuid = dis.readUTF();
@@ -109,6 +173,6 @@ public class DataStreamSerializer implements StreamSerializer {
                 }
             }
             return resume;
-        }
-    }
-}
+        }*/
+
+

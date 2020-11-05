@@ -124,7 +124,7 @@ public class Organization implements Serializable {
             this.endDate = endDate;
         }
 
-        public String getTittle() {
+        public String getTitle() {
             return tittle;
         }
 

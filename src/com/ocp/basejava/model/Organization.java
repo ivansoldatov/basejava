@@ -50,6 +50,11 @@ public class Organization implements Serializable {
         this.experiences = asList(experiences);
     }
 
+    public Organization(Link homePage, List<Experience> experiences) {
+        this.homePage = homePage;
+        this.experiences = experiences;
+    }
+
     public Link getHomePage() {
         return homePage;
     }

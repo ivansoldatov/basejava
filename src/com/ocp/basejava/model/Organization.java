@@ -26,6 +26,19 @@ public class Organization implements Serializable {
     public Organization() {
     }
 
+    public Organization(@NotNull String name, @NotNull String url, @NotNull List<Experience> experiences) {
+        this.homePage = new Link(name, url);
+        this.experiences = experiences;
+    }
+
+    public Organization(@NotNull String name, @NotNull String url, Experience... experiences) {
+        this(name, url, asList(experiences));
+    }
+
+    public Organization(Link homePage, List<Experience> experiences) {
+        this(homePage.getName(), homePage.getUrl(), experiences);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,21 +51,6 @@ public class Organization implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(homePage, experiences);
-    }
-
-    public Organization(@NotNull String name, @NotNull String url, @NotNull List<Experience> experiences) {
-        this.homePage = new Link(name, url);
-        this.experiences = experiences;
-    }
-
-    public Organization(@NotNull String name, @NotNull String url, Experience... experiences) {
-        this.homePage = new Link(name, url);
-        this.experiences = asList(experiences);
-    }
-
-    public Organization(Link homePage, List<Experience> experiences) {
-        this.homePage = homePage;
-        this.experiences = experiences;
     }
 
     public Link getHomePage() {

@@ -3,8 +3,10 @@ package com.ocp.basejava;
 import java.util.Random;
 
 public class Deadlock {
-    static Prey antelope = new Prey("Антилопа", 500);
-    static Prey zebra = new Prey("Зебра", 1000);
+    private static final int ANTELOPE_HEALTH = 500;
+    private static final int ZEBRA_HEALTH = 1000;
+    static Prey antelope = new Prey("Антилопа", ANTELOPE_HEALTH);
+    static Prey zebra = new Prey("Зебра", ZEBRA_HEALTH);
     static Predator tiger = new Predator("Тигр");
     static Predator leopard = new Predator("Леопард");
 
@@ -21,15 +23,15 @@ public class Deadlock {
                 e.printStackTrace();
             }
             synchronized (p2) {
-                pr.hunt(p1);
-                pr.hunt(p2);
+            pr.hunt(p1);
+            pr.hunt(p2);
             }
         }
+        System.out.println(p1 + " получила повреждения: " + p1.health);
+        System.out.println(p2 + " получила повреждения: " + p2.health);
     }
 
-
-
-    public static class Predator  {
+    public static class Predator {
         private String name;
         final Random random = new Random();
 
@@ -41,7 +43,7 @@ public class Deadlock {
             int damage = random.nextInt(101);
             prey.getDamage(damage);
             System.out.println(name + " охотится на " + prey);
-            System.out.println(name+ " нанес урон "+prey+": " + damage);
+            System.out.println(name + " нанес урон " + prey + ": " + damage);
         }
 
         @Override
@@ -68,6 +70,5 @@ public class Deadlock {
             return name;
         }
     }
-
 }
 

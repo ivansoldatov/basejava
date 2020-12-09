@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FileStorage extends AbstractStorage<File> {
@@ -86,6 +85,7 @@ public class FileStorage extends AbstractStorage<File> {
             doDelete(file);
         }
     }
+
     @Override
     public int size() {
         return getFiles().length;
@@ -94,7 +94,7 @@ public class FileStorage extends AbstractStorage<File> {
     private File[] getFiles() {
         File[] listFiles = directory.listFiles();
         if (listFiles == null) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error");
         } else {
             return listFiles;
         }

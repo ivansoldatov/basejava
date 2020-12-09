@@ -4,11 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class MainStream {
 
-    static int[] values = {9, 3, 5, 8, 3, 2, 5, 6, 2};
+    static int[] values = {9, 3, 5, 3};
 
     public static void main(String[] args) {
         System.out.println(minValue(values));
@@ -23,9 +22,7 @@ public class MainStream {
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
-        Stream<Integer> stream = integers.stream();
-        if ((integers.stream().mapToInt(x -> x).sum()) % 2 == 0) {
-            return stream.filter(x -> x % 2 != 0).collect(Collectors.toList());
-        } else return stream.filter(x -> x % 2 == 0).collect(Collectors.toList());
+        boolean even = integers.stream().mapToInt(x -> x).sum() % 2 == 0;
+        return integers.stream().filter(even ? x -> x % 2 != 0 : x -> x % 2 == 0).collect(Collectors.toList());
     }
 }

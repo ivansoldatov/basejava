@@ -1,5 +1,6 @@
 package com.ocp.basejava.storage;
 
+import com.ocp.basejava.Config;
 import com.ocp.basejava.ResumeTestData;
 import com.ocp.basejava.exception.ExistStorageException;
 import com.ocp.basejava.exception.NotExistStorageException;
@@ -11,10 +12,12 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("D:\\Java\\basejava\\storage");
+//    protected static final File STORAGE_DIR = new File("/home/ias/java/basejava/storage");
+        protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
     Storage storage;
 
     static final String UUID_1 = "uuid1";

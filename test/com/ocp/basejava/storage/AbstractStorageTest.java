@@ -16,8 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 abstract class AbstractStorageTest {
-//    protected static final File STORAGE_DIR = new File("/home/ias/java/basejava/storage");
-        protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
+    protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
+    public static final String DB_URL = Config.getInstance().getDbURL();
+    public static final String DB_USER = Config.getInstance().getDbUser();
+    public static final String DB_PASSWORD = Config.getInstance().getDbPassword();
+
     Storage storage;
 
     static final String UUID_1 = "uuid1";
@@ -26,9 +29,13 @@ abstract class AbstractStorageTest {
     static final String UUID_4 = "uuid4";
 
     static final Resume RESUME_1 = ResumeTestData.fillResumeEmpty(UUID_1, "Name1");
-    static final Resume RESUME_2 = ResumeTestData.fillResumeContacts(UUID_2, "Name2");
-    static final Resume RESUME_3 = ResumeTestData.fillResumeFull(UUID_3, "Name3");
-    static final Resume RESUME_4 = ResumeTestData.fillResumeFull(UUID_4, "Name4");
+    static final Resume RESUME_2 = ResumeTestData.fillResumeEmpty(UUID_2, "Name2");
+    static final Resume RESUME_3 = ResumeTestData.fillResumeEmpty(UUID_3, "Name3");
+    static final Resume RESUME_4 = ResumeTestData.fillResumeEmpty(UUID_4, "Name4");
+
+//    static final Resume RESUME_2 = ResumeTestData.fillResumeContacts(UUID_2, "Name2");
+//    static final Resume RESUME_3 = ResumeTestData.fillResumeFull(UUID_3, "Name3");
+//    static final Resume RESUME_4 = ResumeTestData.fillResumeFull(UUID_4, "Name4");
 
     AbstractStorageTest(Storage storage) {
         this.storage = storage;

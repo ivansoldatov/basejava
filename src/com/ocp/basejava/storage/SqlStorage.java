@@ -1,23 +1,22 @@
 package com.ocp.basejava.storage;
 
-import com.ocp.basejava.exception.ExistStorageException;
 import com.ocp.basejava.exception.NotExistStorageException;
 import com.ocp.basejava.exception.StorageException;
 import com.ocp.basejava.model.Resume;
 import com.ocp.basejava.sql.ConnectionFactory;
+import com.ocp.basejava.sql.SQLHelper;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SqlStorage implements Storage {
 
-    public final ConnectionFactory connectionFactory;
+    private final SQLHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        this.sqlHelper = new SQLHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
     @Override
@@ -46,6 +45,17 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
+        sqlHelper.doConnection("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
+            ps.setString(1, resume.getUuid());
+            ps.setString(2, resume.getFullName());
+            ps.execute();
+            return null;
+        });
+    }
+
+
+    /*@Override
+    public void save(Resume resume) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
             ps.setString(1, resume.getUuid());
@@ -56,7 +66,7 @@ public class SqlStorage implements Storage {
         } catch (SQLException e) {
             throw new StorageException(e);
         }
-    }
+    }*/
 
     @Override
     public Resume get(String uuid) {
@@ -95,11 +105,10 @@ public class SqlStorage implements Storage {
             while (rs.next()) {
                 list.add(new Resume(rs.getString("uuid").trim(), rs.getString("full_name")));
             }
+            return list;
         } catch (SQLException e) {
             throw new StorageException(e);
         }
-        Collections.sort(list);
-        return list;
     }
 
     @Override

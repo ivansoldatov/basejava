@@ -36,9 +36,7 @@ public class Config {
         return storageDir;
     }
 
-    public String getDbURL() {
-        return dbURL;
-    }
+    public String getDbURL() {return dbURL; }
 
     public String getDbUser() {
         return dbUser;

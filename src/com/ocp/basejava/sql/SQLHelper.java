@@ -15,12 +15,12 @@ public class SQLHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public <T> T doConnection(String sql, SQLScript<T> sqlScript) {
+    public <T> T doConnection(String sql, SQLRunner<T> sqlRunner) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            return sqlScript.execute(ps);
+            return sqlRunner.execute(ps);
         } catch (SQLException e) {
-            if (e.getSQLState().equals(23505))
+            if (e.getSQLState().equals("23505"))
                 throw new ExistStorageException(null);
             else
                 throw new StorageException(e);

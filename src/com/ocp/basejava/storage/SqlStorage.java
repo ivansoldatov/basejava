@@ -1,6 +1,7 @@
 package com.ocp.basejava.storage;
 
 import com.ocp.basejava.exception.NotExistStorageException;
+import com.ocp.basejava.model.ContactType;
 import com.ocp.basejava.model.Resume;
 import com.ocp.basejava.sql.SQLHelper;
 
@@ -49,13 +50,19 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.doConnection("SELECT * FROM resume r WHERE r.uuid=?", ps -> {
+        return sqlHelper.doConnection("SELECT * FROM resume r " +
+                "JOIN contact c on r.uuid = c.resume_uuid " +
+                "WHERE r.uuid=?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
                 throw new NotExistStorageException(uuid);
             }
-            return new Resume(uuid, rs.getString("full_name"));
+            Resume r = new Resume(uuid, rs.getString("full_name"));
+            do {
+                r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+            } while (rs.next());
+            return r;
         });
     }
 

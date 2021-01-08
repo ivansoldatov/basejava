@@ -24,11 +24,15 @@ abstract class AbstractStorageTest {
     static final String UUID_2 = "uuid2";
     static final String UUID_3 = "uuid3";
     static final String UUID_4 = "uuid4";
+//    static final Resume RESUME_1 = ResumeTestData.fillResumeEmpty(UUID_1, "Name1");
+//    static final Resume RESUME_2 = ResumeTestData.fillResumeEmpty(UUID_2, "Name2");
+//    static final Resume RESUME_3 = ResumeTestData.fillResumeEmpty(UUID_3, "Name3");
+//    static final Resume RESUME_4 = ResumeTestData.fillResumeEmpty(UUID_4, "Name4");
 
-    static final Resume RESUME_1 = ResumeTestData.fillResumeEmpty(UUID_1, "Name1");
-    static final Resume RESUME_2 = ResumeTestData.fillResumeEmpty(UUID_2, "Name2");
-    static final Resume RESUME_3 = ResumeTestData.fillResumeEmpty(UUID_3, "Name3");
-    static final Resume RESUME_4 = ResumeTestData.fillResumeEmpty(UUID_4, "Name4");
+    static final Resume RESUME_1 = ResumeTestData.fillResumeContacts(UUID_1, "Name1");
+    static final Resume RESUME_2 = ResumeTestData.fillResumeContacts(UUID_2, "Name2");
+    static final Resume RESUME_3 = ResumeTestData.fillResumeContacts(UUID_3, "Name3");
+    static final Resume RESUME_4 = ResumeTestData.fillResumeContacts(UUID_4, "Name4");
 
 //    static final Resume RESUME_2 = ResumeTestData.fillResumeContacts(UUID_2, "Name2");
 //    static final Resume RESUME_3 = ResumeTestData.fillResumeFull(UUID_3, "Name3");

@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage {
 
@@ -46,6 +47,15 @@ public class SqlStorage implements Storage {
             ps.execute();
             return null;
         });
+        sqlHelper.doConnection("INSERT INTO contact (resume_uuid, type, value) VALUES  (?,?,?)", ps -> {
+            ps.setString(1, resume.getUuid());
+            for (Map.Entry e : resume.getContacts().entrySet()) {
+                ps.setString(2, e.getKey().toString());
+                ps.setString(3, e.getValue().toString());
+                ps.execute();
+            }
+            return null;
+        });
     }
 
     @Override
@@ -69,6 +79,7 @@ public class SqlStorage implements Storage {
             return r;
         });
     }
+
     @Override
     public void delete(String uuid) {
         sqlHelper.doConnection("DELETE FROM resume r WHERE r.uuid=?", ps -> {
@@ -79,6 +90,7 @@ public class SqlStorage implements Storage {
             return null;
         });
     }
+
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> list = new ArrayList<>(size());
@@ -90,6 +102,7 @@ public class SqlStorage implements Storage {
             return list;
         });
     }
+
     @Override
     public int size() {
         return sqlHelper.doConnection("SELECT count(*) FROM resume", ps -> {

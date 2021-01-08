@@ -7,8 +7,8 @@ import java.time.Month;
 
 public class ResumeTestData {
 
-    public static Resume fillResumeEmpty(String name, String uuid) {
-        return new Resume(name, uuid);
+    public static Resume fillResumeEmpty(String uuid, String full_name) {
+        return new Resume(uuid, full_name);
     }
 
     public static Resume fillResumeContacts(String name, String uuid) {

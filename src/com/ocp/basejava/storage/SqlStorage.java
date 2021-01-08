@@ -51,7 +51,7 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return sqlHelper.doConnection("SELECT * FROM resume r " +
-                "JOIN contact c on r.uuid = c.resume_uuid " +
+                "LEFT JOIN contact c on r.uuid = c.resume_uuid " +
                 "WHERE r.uuid=?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
@@ -60,12 +60,15 @@ public class SqlStorage implements Storage {
             }
             Resume r = new Resume(uuid, rs.getString("full_name"));
             do {
-                r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
-            } while (rs.next());
+                String type = rs.getString("type");
+                if (!rs.wasNull()) {
+                    r.addContact(ContactType.valueOf(type), rs.getString("value"));
+                }
+            }
+            while (rs.next());
             return r;
         });
     }
-
     @Override
     public void delete(String uuid) {
         sqlHelper.doConnection("DELETE FROM resume r WHERE r.uuid=?", ps -> {
@@ -76,7 +79,6 @@ public class SqlStorage implements Storage {
             return null;
         });
     }
-
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> list = new ArrayList<>(size());
@@ -88,7 +90,6 @@ public class SqlStorage implements Storage {
             return list;
         });
     }
-
     @Override
     public int size() {
         return sqlHelper.doConnection("SELECT count(*) FROM resume", ps -> {

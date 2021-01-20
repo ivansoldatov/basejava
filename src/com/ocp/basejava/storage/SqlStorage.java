@@ -37,6 +37,15 @@ public class SqlStorage implements Storage {
             }
             return null;
         });
+        sqlHelper.doConnection("UPDATE contact c SET type=?, value=? WHERE resume_uuid=?", ps -> {
+            ps.setString(3, resume.getUuid());
+            for (Map.Entry e : resume.getContacts().entrySet()) {
+                ps.setString(1, e.getKey().toString());
+                ps.setString(2, e.getValue().toString());
+                ps.execute();
+            }
+            return null;
+        });
     }
 
     @Override
@@ -97,7 +106,16 @@ public class SqlStorage implements Storage {
         return sqlHelper.doConnection("SELECT * FROM resume ORDER BY full_name, uuid", ps -> {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Resume(rs.getString("uuid").trim(), rs.getString("full_name")));
+                Resume newResume = new Resume(rs.getString("uuid").trim(), rs.getString("full_name"));
+                sqlHelper.doConnection("SELECT * FROM contact WHERE resume_uuid=?", psc -> {
+                    psc.setString(1, newResume.getUuid());
+                    ResultSet rsc = psc.executeQuery();
+                    while (rsc.next()) {
+                        newResume.addContact(ContactType.valueOf(rsc.getString("type")), rsc.getString("value"));
+                    }
+                    return null;
+                });
+                list.add(newResume);
             }
             return list;
         });

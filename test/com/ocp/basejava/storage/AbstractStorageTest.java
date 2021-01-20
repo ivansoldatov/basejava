@@ -4,6 +4,7 @@ import com.ocp.basejava.Config;
 import com.ocp.basejava.ResumeTestData;
 import com.ocp.basejava.exception.ExistStorageException;
 import com.ocp.basejava.exception.NotExistStorageException;
+import com.ocp.basejava.model.ContactType;
 import com.ocp.basejava.model.Resume;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,6 +65,8 @@ abstract class AbstractStorageTest {
     @Test
     void update() {
         Resume newResume = new Resume(UUID_1, "New Name");
+        newResume.addContact(ContactType.PHONE,"New phone");
+        newResume.addContact(ContactType.MAIL,"New mail");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }

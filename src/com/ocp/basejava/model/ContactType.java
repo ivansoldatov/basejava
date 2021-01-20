@@ -3,7 +3,7 @@ package com.ocp.basejava.model;
 public enum ContactType {
     PHONE("Телефон"),
     MOBILE("Мобильный"),
-    HOME_RHONE("Дом. телефон"),
+    HOME_PHONE("Дом. телефон"),
     SKYPE("Skype"),
     MAIL("E-Mail"),
     LINKEDIN("Профиль LinkedIn"),

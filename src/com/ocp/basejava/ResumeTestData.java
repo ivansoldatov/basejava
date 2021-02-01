@@ -20,6 +20,16 @@ public class ResumeTestData {
         return resume;
     }
 
+    public static Resume fillResumeContactsAnother(String name, String uuid) {
+        Resume resume = new Resume(name, uuid);
+        resume.addContact(ContactType.PHONE, "+7(4955) 000-00-00");
+        resume.addContact(ContactType.MAIL, "another@another.ru");
+        resume.addContact(ContactType.SKYPE, "skype-another");
+        resume.addContact(ContactType.LINKEDIN, "http://another.ru/");
+        resume.addContact(ContactType.STACKOVERFLOW, "stackoverflow-another");
+        return resume;
+    }
+
     public static Resume fillResumeFull(String name, String uuid) {
         Resume resume = new Resume(name, uuid);
         resume.addContact(ContactType.PHONE, "+7(921) 855-0482");

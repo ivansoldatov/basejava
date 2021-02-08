@@ -1,9 +1,6 @@
 package com.ocp.basejava;
 
 import com.ocp.basejava.model.*;
-import com.ocp.basejava.util.DateUtil;
-
-import java.time.Month;
 
 public class ResumeTestData {
 
@@ -41,11 +38,11 @@ public class ResumeTestData {
         resume.addSection(SectionType.PERSONAL, new TextSection("Пурист кода и архитектуры."));
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Java Enterprise", "Управления проектами Wrike"));
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection("OC4J", " JBoss", "Tomcat", " Jetty"));
-        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization("Java Online Projects", "https://javaops.ru/",
-                new Organization.Experience(DateUtil.of(2013, Month.OCTOBER), DateUtil.NOW, "Автор проекта", "Создание Java проектов и стажировок."))));
-        resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Organization("Интститут", "https://itmo.ru/ru/",
-                new Organization.Experience(DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "------", "Аспирантура"),
-                new Organization.Experience(DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "------", "Инженер"))));
+//        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization("Java Online Projects", "https://javaops.ru/",
+//                new Organization.Experience(DateUtil.of(2013, Month.OCTOBER), DateUtil.NOW, "Автор проекта", "Создание Java проектов и стажировок."))));
+//        resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Organization("Интститут", "https://itmo.ru/ru/",
+//                new Organization.Experience(DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY), "------", "Аспирантура"),
+//                new Organization.Experience(DateUtil.of(1993, Month.SEPTEMBER), DateUtil.of(1996, Month.JULY), "------", "Инженер"))));
         return resume;
     }
 }

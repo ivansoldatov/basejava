@@ -1,8 +1,7 @@
 package com.ocp.basejava.storage;
 
 import com.ocp.basejava.exception.NotExistStorageException;
-import com.ocp.basejava.model.ContactType;
-import com.ocp.basejava.model.Resume;
+import com.ocp.basejava.model.*;
 import com.ocp.basejava.sql.SQLHelper;
 
 import java.sql.*;
@@ -25,6 +24,58 @@ public class SqlStorage implements Storage {
     }
 
     @Override
+    public void save(Resume resume) {
+        sqlHelper.transactionExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+                ps.setString(1, resume.getUuid());
+                ps.setString(2, resume.getFullName());
+                ps.execute();
+            }
+            insertContacts(conn, resume);
+            insertSections(conn, resume);
+            return null;
+        });
+    }
+
+    private void addSections()
+
+    private void insertSections(Connection conn, Resume resume) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO text_section(type, content, resume_uuid) VALUES (?,?,?)")) {
+            Map<SectionType, AbstractSection> map = resume.getSections();
+            for (Map.Entry<SectionType, AbstractSection> entry : map.entrySet()) {
+                String type = entry.getKey().getTitle();
+                switch (entry.getKey()) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        TextSection textSection = (TextSection) entry.getValue();
+                        ps.setString(1, type);
+                        ps.setString(2, textSection.getContent());
+                        ps.setString(3, resume.getUuid());
+                        ps.addBatch();
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ListSection listSection = (ListSection) entry.getValue();
+                        ps.setString(1, type);
+                        StringBuilder stringBuilder = new StringBuilder("");
+                        for (String s : listSection.getItems()) {
+                            stringBuilder.append(s);
+                            stringBuilder.append("\\n");
+                        }
+                        ps.setString(2, stringBuilder.toString());
+                        ps.setString(3, resume.getUuid());
+                        ps.addBatch();
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        break;
+                }
+                ps.executeBatch();
+            }
+        }
+    }
+
+    @Override
     public void update(Resume resume) {
         sqlHelper.transactionExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("UPDATE resume r SET full_name=? WHERE uuid=?")) {
@@ -35,19 +86,6 @@ public class SqlStorage implements Storage {
                 }
             }
             deleteContacts(resume);
-            insertContacts(conn, resume);
-            return null;
-        });
-    }
-
-    @Override
-    public void save(Resume resume) {
-        sqlHelper.transactionExecute(conn -> {
-            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
-                ps.setString(1, resume.getUuid());
-                ps.setString(2, resume.getFullName());
-                ps.execute();
-            }
             insertContacts(conn, resume);
             return null;
         });
@@ -99,7 +137,7 @@ public class SqlStorage implements Storage {
                     }
                     addContact(map.get(uuid), rs);
                 }
-                return new ArrayList<Resume>(map.values());
+                return new ArrayList<>(map.values());
             }
         });
     }
